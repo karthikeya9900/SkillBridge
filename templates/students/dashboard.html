@@ -6,7 +6,10 @@
     <h1 class="h3 mb-1">Student Dashboard</h1>
     <p class="text-secondary mb-0">{{ profile.user.get_full_name|default:profile.user.username }}</p>
   </div>
-  <a class="btn btn-primary" href="{% url 'students:profile' %}">Edit profile</a>
+  <div class="d-flex gap-2">
+    <a class="btn btn-outline-primary" href="{% url 'students:applications' %}">Applications</a>
+    <a class="btn btn-primary" href="{% url 'students:profile' %}">Edit profile</a>
+  </div>
 </div>
 
 <div class="row g-3 mb-4">

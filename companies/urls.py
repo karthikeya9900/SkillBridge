@@ -7,4 +7,5 @@ app_name = "companies"
 urlpatterns = [
     path("", views.dashboard, name="dashboard"),
     path("profile/", views.edit_profile, name="profile"),
+    path("applicants/", views.applicants, name="applicants"),
 ]

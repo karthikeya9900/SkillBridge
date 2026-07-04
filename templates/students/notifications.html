@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Notifications | SkillBridge{% endblock %}
+{% block content %}
+<h1 class="h3 mb-3">Notifications</h1>
+<div class="dashboard-panel p-3">
+  {% for broadcast in broadcasts %}
+    <div class="border-top py-3">
+      <div class="d-flex justify-content-between gap-3">
+        <div class="fw-semibold">{{ broadcast.title }}</div>
+        <span class="small text-secondary">{{ broadcast.publish_at|date:"M d, Y H:i" }}</span>
+      </div>
+      <div class="small text-secondary">{{ broadcast.get_audience_display }}</div>
+      <p class="mb-0 mt-2">{{ broadcast.message|linebreaksbr }}</p>
+    </div>
+  {% empty %}
+    <p class="text-secondary mb-0">No notifications yet.</p>
+  {% endfor %}
+</div>
+{% endblock %}

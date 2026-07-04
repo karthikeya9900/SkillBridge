@@ -4,7 +4,7 @@ from jobs.models import Application, PlacementDrive
 
 def student_dashboard_context(student):
     applications = Application.objects.filter(student=student).select_related("drive", "drive__company")[:5]
-    applied_drive_ids = applications.values_list("drive_id", flat=True)
+    applied_drive_ids = set(Application.objects.filter(student=student).values_list("drive_id", flat=True))
     jobs = [
         drive
         for drive in PlacementDrive.objects.select_related("company").filter(is_active=True)[:20]

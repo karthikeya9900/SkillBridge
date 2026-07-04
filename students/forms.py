@@ -7,10 +7,23 @@ class StudentProfileForm(forms.ModelForm):
     first_name = forms.CharField(max_length=150)
     last_name = forms.CharField(max_length=150, required=False)
     email = forms.EmailField()
+    cgpa = forms.DecimalField(label="CGPA", max_digits=4, decimal_places=2, required=False)
 
     class Meta:
         model = StudentProfile
-        fields = ["phone", "department", "branch", "year", "cgpa", "skills", "photo", "resume"]
+        fields = [
+            "first_name",
+            "last_name",
+            "email",
+            "phone",
+            "department",
+            "branch",
+            "year",
+            "cgpa",
+            "skills",
+            "photo",
+            "resume",
+        ]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

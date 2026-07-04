@@ -1,6 +1,7 @@
 from pathlib import Path
 import os
 
+from django.contrib import messages
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -104,6 +105,10 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 LOGIN_URL = "login"
 LOGIN_REDIRECT_URL = "dashboard"
 LOGOUT_REDIRECT_URL = "home"
+
+MESSAGE_TAGS = {
+    messages.ERROR: "danger",
+}
 
 if not DEBUG:
     CSRF_COOKIE_SECURE = True

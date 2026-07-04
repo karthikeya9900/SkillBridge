@@ -3,11 +3,30 @@
 {% block content %}
 <div class="d-flex justify-content-between align-items-center mb-3">
   <h1 class="h3 mb-0">Placement Drives</h1>
-  <form class="d-flex" method="get">
-    <input name="q" value="{{ query }}" class="form-control" placeholder="Search jobs">
-    <button class="btn btn-primary ms-2">Search</button>
-  </form>
 </div>
+<form class="dashboard-panel p-3 mb-4" method="get">
+  <div class="row g-2 align-items-end">
+    <div class="col-md-4">
+      <label class="form-label" for="q">Search</label>
+      <input id="q" name="q" value="{{ filters.q }}" class="form-control" placeholder="Title, company, description">
+    </div>
+    <div class="col-md-2">
+      <label class="form-label" for="branch">Branch</label>
+      <input id="branch" name="branch" value="{{ filters.branch }}" class="form-control" placeholder="CSE">
+    </div>
+    <div class="col-md-2">
+      <label class="form-label" for="location">Location</label>
+      <input id="location" name="location" value="{{ filters.location }}" class="form-control" placeholder="Hyderabad">
+    </div>
+    <div class="col-md-2">
+      <label class="form-label" for="min_cgpa">My CGPA</label>
+      <input id="min_cgpa" name="min_cgpa" value="{{ filters.min_cgpa }}" class="form-control" placeholder="8.0">
+    </div>
+    <div class="col-md-2 d-grid">
+      <button class="btn btn-primary">Filter</button>
+    </div>
+  </div>
+</form>
 <div class="row g-3">
   {% for drive in drives %}
     <div class="col-md-6">

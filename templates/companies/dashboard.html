@@ -8,7 +8,10 @@
   </div>
   <div class="d-flex gap-2">
     <a class="btn btn-outline-primary" href="{% url 'companies:profile' %}">Edit profile</a>
-    <a class="btn btn-primary" href="{% url 'jobs:create' %}">Post job</a>
+    <a class="btn btn-outline-primary" href="{% url 'companies:applicants' %}">All applicants</a>
+    {% if company.is_approved %}
+      <a class="btn btn-primary" href="{% url 'jobs:create' %}">Post job</a>
+    {% endif %}
   </div>
 </div>
 
@@ -28,6 +31,16 @@
       <div class="d-flex gap-2">
         <a class="btn btn-sm btn-outline-primary" href="{% url 'jobs:applicants' drive.pk %}">Applicants</a>
         <a class="btn btn-sm btn-outline-secondary" href="{% url 'jobs:edit' drive.pk %}">Edit</a>
+        {% if drive.is_active %}
+          <form method="post" action="{% url 'jobs:close' drive.pk %}">
+            {% csrf_token %}
+            <button class="btn btn-sm btn-outline-warning">Close</button>
+          </form>
+        {% endif %}
+        <form method="post" action="{% url 'jobs:delete' drive.pk %}">
+          {% csrf_token %}
+          <button class="btn btn-sm btn-outline-danger">Delete</button>
+        </form>
       </div>
     </div>
   {% empty %}

@@ -13,7 +13,13 @@
         <div class="text-secondary small">{{ broadcast.get_audience_display }} · {{ broadcast.publish_at }}</div>
         <p class="mb-0">{{ broadcast.message|truncatewords:22 }}</p>
       </div>
-      <a class="btn btn-sm btn-outline-primary" href="{% url 'broadcasts:edit' broadcast.pk %}">Edit</a>
+      <div class="d-flex gap-2 align-items-start">
+        <a class="btn btn-sm btn-outline-primary" href="{% url 'broadcasts:edit' broadcast.pk %}">Edit</a>
+        <form method="post" action="{% url 'broadcasts:delete' broadcast.pk %}">
+          {% csrf_token %}
+          <button class="btn btn-sm btn-outline-danger">Delete</button>
+        </form>
+      </div>
     </div>
   {% empty %}
     <p class="text-secondary mb-0">No broadcasts created yet.</p>

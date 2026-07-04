@@ -7,4 +7,6 @@ app_name = "students"
 urlpatterns = [
     path("", views.dashboard, name="dashboard"),
     path("profile/", views.edit_profile, name="profile"),
+    path("applications/", views.applications, name="applications"),
+    path("notifications/", views.notifications, name="notifications"),
 ]

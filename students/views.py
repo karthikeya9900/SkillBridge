@@ -1,9 +1,10 @@
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 
 from accounts.decorators import role_required
 from accounts.models import User
+from broadcasts.models import Broadcast
+from jobs.models import Application
 
 from .forms import StudentProfileForm
 from .services import student_dashboard_context
@@ -27,3 +28,20 @@ def edit_profile(request):
     else:
         form = StudentProfileForm(instance=profile)
     return render(request, "students/profile_form.html", {"form": form})
+
+
+@role_required(User.Role.STUDENT)
+def applications(request):
+    profile = request.user.student_profile
+    applications = Application.objects.filter(student=profile).select_related("drive", "drive__company")
+    return render(request, "students/applications.html", {"applications": applications})
+
+
+@role_required(User.Role.STUDENT)
+def notifications(request):
+    profile = request.user.student_profile
+    audiences = [Broadcast.Audience.ALL]
+    if profile.year == profile.Year.FINAL:
+        audiences.append(Broadcast.Audience.FINAL_YEAR)
+    broadcasts = Broadcast.objects.filter(is_active=True, audience__in=audiences).select_related("created_by")
+    return render(request, "students/notifications.html", {"broadcasts": broadcasts})

@@ -41,3 +41,15 @@ def edit_broadcast(request, pk):
     else:
         form = BroadcastForm(instance=broadcast)
     return render(request, "broadcasts/form.html", {"form": form, "title": "Edit Broadcast"})
+
+
+@role_required(User.Role.ADMIN)
+def delete_broadcast(request, pk):
+    broadcast = get_object_or_404(Broadcast, pk=pk)
+    if request.method == "POST":
+        title = broadcast.title
+        broadcast.delete()
+        messages.success(request, f"{title} was deleted.")
+    else:
+        messages.info(request, "Use the delete button on a broadcast to remove it.")
+    return redirect("broadcasts:list")

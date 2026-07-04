@@ -7,16 +7,13 @@ from accounts.models import User
 
 from .forms import ApplicationStatusForm, PlacementDriveForm
 from .models import Application, PlacementDrive
-from .services import apply_to_drive, visible_drives_for_user
+from .services import apply_to_drive, filter_drives, visible_drives_for_user
 
 
 @login_required
 def list_drives(request):
-    drives = visible_drives_for_user(request.user)
-    query = request.GET.get("q", "").strip()
-    if query:
-        drives = [drive for drive in drives if query.lower() in drive.title.lower() or query.lower() in drive.company.name.lower()]
-    return render(request, "jobs/list.html", {"drives": drives, "query": query})
+    drives = filter_drives(visible_drives_for_user(request.user), request.GET)
+    return render(request, "jobs/list.html", {"drives": drives, "filters": request.GET})
 
 
 @login_required
@@ -39,6 +36,9 @@ def apply(request, pk):
 @role_required(User.Role.COMPANY)
 def create_drive(request):
     company = request.user.company_profile
+    if not company.is_approved:
+        messages.error(request, "Your company must be approved before posting placement drives.")
+        return redirect("companies:dashboard")
     if request.method == "POST":
         form = PlacementDriveForm(request.POST)
         if form.is_valid():
@@ -65,6 +65,30 @@ def edit_drive(request, pk):
     else:
         form = PlacementDriveForm(instance=drive)
     return render(request, "jobs/drive_form.html", {"form": form, "title": "Edit Placement Drive"})
+
+
+@role_required(User.Role.COMPANY)
+def delete_drive(request, pk):
+    drive = get_object_or_404(PlacementDrive, pk=pk, company=request.user.company_profile)
+    if request.method == "POST":
+        title = drive.title
+        drive.delete()
+        messages.success(request, f"{title} was deleted.")
+    else:
+        messages.info(request, "Use the delete button on a drive to remove it.")
+    return redirect("companies:dashboard")
+
+
+@role_required(User.Role.COMPANY)
+def close_drive(request, pk):
+    drive = get_object_or_404(PlacementDrive, pk=pk, company=request.user.company_profile)
+    if request.method == "POST":
+        drive.is_active = False
+        drive.save(update_fields=["is_active", "updated_at"])
+        messages.success(request, f"{drive.title} was closed.")
+    else:
+        messages.info(request, "Use the close button on a drive to deactivate it.")
+    return redirect("companies:dashboard")
 
 
 @role_required(User.Role.COMPANY)

@@ -8,4 +8,5 @@ urlpatterns = [
     path("", views.list_broadcasts, name="list"),
     path("create/", views.create_broadcast, name="create"),
     path("<int:pk>/edit/", views.edit_broadcast, name="edit"),
+    path("<int:pk>/delete/", views.delete_broadcast, name="delete"),
 ]

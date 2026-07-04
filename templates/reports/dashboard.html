@@ -16,6 +16,17 @@
   <div class="col-md-3"><div class="dashboard-panel metric p-3"><div class="text-secondary">Offers</div><div class="h4 mb-0">{{ summary.offers }}</div></div></div>
 </div>
 
+<div class="dashboard-panel p-3 mb-4">
+  <h2 class="h5">Management</h2>
+  <div class="quick-nav mb-0">
+    <a href="{% url 'reports:students' %}">Manage Students</a>
+    <a href="{% url 'reports:companies' %}">Manage Companies</a>
+    <a href="{% url 'reports:drives' %}">Manage Drives</a>
+    <a href="{% url 'reports:applications' %}">View Applications</a>
+    <a href="{% url 'broadcasts:list' %}">Manage Broadcasts</a>
+  </div>
+</div>
+
 <div class="row g-4">
   <div class="col-lg-6">
     <div class="dashboard-panel p-3">

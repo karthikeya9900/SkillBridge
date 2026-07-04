@@ -4,6 +4,9 @@ from .models import Application, PlacementDrive
 
 
 class PlacementDriveForm(forms.ModelForm):
+    package_lpa = forms.DecimalField(label="Package (LPA)", max_digits=6, decimal_places=2, required=False)
+    min_cgpa = forms.DecimalField(label="Minimum CGPA", max_digits=4, decimal_places=2, required=False)
+
     class Meta:
         model = PlacementDrive
         fields = [

@@ -1,16 +1,17 @@
 # SkillBridge
 
-Simple modular Django MVP for student placement management.
+SkillBridge is a modular Django platform for managing campus placement workflows, including student profiles, employer/company profiles, placement drives, applications, broadcasts, and admin reporting.
 
-## Current scope
+## Current capabilities
 
 - Role-based authentication for admins, students, and companies
-- Student profiles with skills and resume upload
-- Company profiles with admin approval flag
-- Placement drives/jobs
-- Student applications and company/admin status updates
-- Broadcast announcements
-- Admin report dashboard
+- Student profiles with academic details, skills, photo, resume, and email notification preferences
+- Company profiles with approval workflow and notification preferences
+- Placement drives/jobs with eligibility rules and active/inactive state
+- Student applications with duplicate prevention and company-side status updates
+- Broadcast announcements for students and companies
+- Admin dashboards for monitoring students, companies, drives, applications, and offers
+- Password reset by email and basic email notifications for broadcasts and application updates
 
 ## Local setup
 
@@ -23,8 +24,16 @@ python manage.py createsuperuser
 python manage.py runserver
 ```
 
-Open `http://127.0.0.1:8000/`.
+Open http://127.0.0.1:8000/.
+
+## Testing
+
+Run the test suite with:
+
+```powershell
+python manage.py test
+```
 
 ## Notes
 
-The project uses SQLite by default to keep the first version simple. The settings file reads environment variables for production-oriented values, so PostgreSQL can be introduced later without changing app code.
+The project uses SQLite by default for local development. The settings file already supports environment-based configuration, so PostgreSQL and production hardening can be introduced later without changing the application structure.

@@ -18,6 +18,7 @@ class StudentProfile(models.Model):
     skills = models.TextField(blank=True, help_text="Comma-separated skills")
     photo = models.ImageField(upload_to="students/photos/", blank=True)
     resume = models.FileField(upload_to="students/resumes/", blank=True)
+    receive_email_notifications = models.BooleanField(default=True)
     is_verified = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

@@ -22,6 +22,7 @@ def create_broadcast(request):
             broadcast = form.save(commit=False)
             broadcast.created_by = request.user
             broadcast.save()
+            broadcast.send_notifications()
             messages.success(request, "Broadcast saved.")
             return redirect("broadcasts:list")
     else:

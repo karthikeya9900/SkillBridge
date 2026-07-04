@@ -1,7 +1,8 @@
 from datetime import date, timedelta
 
+from django.core import mail
 from django.contrib.auth import get_user_model
-from django.test import TestCase
+from django.test import TestCase, override_settings
 from django.urls import reverse
 
 from accounts.models import User
@@ -192,3 +193,38 @@ class SkillBridgeFlowTests(TestCase):
         response = self.client.get(reverse("jobs:list"), {"branch": "CSE", "min_cgpa": "8.25"})
 
         self.assertContains(response, "Developer Intern")
+
+    @override_settings(EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend")
+    def test_password_reset_sends_email(self):
+        self.student_user.email = "student@example.com"
+        self.student_user.save(update_fields=["email"])
+
+        response = self.client.post(reverse("password_reset"), {"email": self.student_user.email}, follow=True)
+
+        self.assertContains(response, "We’ve emailed you")
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertIn(self.student_user.email, mail.outbox[0].to)
+
+    @override_settings(EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend")
+    def test_broadcast_creation_sends_notification_to_enabled_students(self):
+        self.student_user.email = "student@example.com"
+        self.student_user.save(update_fields=["email"])
+        self.student.receive_email_notifications = True
+        self.student.save(update_fields=["receive_email_notifications"])
+
+        self.client.login(username="admin", password="TestPass123!")
+        response = self.client.post(
+            reverse("broadcasts:create"),
+            {
+                "title": "Drive Alert",
+                "message": "A new placement drive is live.",
+                "audience": Broadcast.Audience.ALL,
+                "publish_at": "2026-07-04T09:30",
+                "is_active": "on",
+            },
+            follow=True,
+        )
+
+        self.assertContains(response, "Broadcast saved.")
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertIn(self.student_user.email, mail.outbox[0].to)

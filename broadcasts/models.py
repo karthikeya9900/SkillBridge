@@ -1,6 +1,10 @@
 from django.conf import settings
+from django.core.mail import send_mail
 from django.db import models
 from django.utils import timezone
+
+from companies.models import CompanyProfile
+from students.models import StudentProfile
 
 
 class Broadcast(models.Model):
@@ -23,3 +27,26 @@ class Broadcast(models.Model):
 
     def __str__(self):
         return self.title
+
+    def get_recipient_emails(self):
+        if self.audience == self.Audience.COMPANIES:
+            companies = CompanyProfile.objects.filter(user__is_active=True, receive_email_notifications=True)
+            return [company.user.email for company in companies if company.user.email]
+
+        students = StudentProfile.objects.filter(user__is_active=True, receive_email_notifications=True)
+        if self.audience == self.Audience.FINAL_YEAR:
+            students = students.filter(year=StudentProfile.Year.FINAL)
+        return [student.user.email for student in students if student.user.email]
+
+    def send_notifications(self):
+        recipient_emails = self.get_recipient_emails()
+        if not recipient_emails:
+            return 0
+        send_mail(
+            subject=f"SkillBridge: {self.title}",
+            message=f"{self.message}\n\nPosted on SkillBridge.",
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=recipient_emails,
+            fail_silently=False,
+        )
+        return len(recipient_emails)

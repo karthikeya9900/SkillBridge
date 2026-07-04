@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.core.mail import send_mail
 from django.db import models
 from django.urls import reverse
 
@@ -65,3 +66,17 @@ class Application(models.Model):
 
     def __str__(self):
         return f"{self.student} - {self.drive}"
+
+    def save(self, *args, **kwargs):
+        previous_status = None
+        if self.pk:
+            previous_status = Application.objects.filter(pk=self.pk).values_list("status", flat=True).first()
+        super().save(*args, **kwargs)
+        if previous_status and previous_status != self.status and self.student.user.email and self.student.receive_email_notifications:
+            send_mail(
+                subject=f"SkillBridge application update: {self.drive.title}",
+                message=f"Your application status for {self.drive.title} is now {self.get_status_display()}.",
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                recipient_list=[self.student.user.email],
+                fail_silently=False,
+            )

@@ -1,439 +1,170 @@
 # SkillBridge Implementation Status
 
-This note compares the current project implementation against `plan.md` and `deep-research-report.md`.
+This document compares the current Django codebase with the project plan and the research report, and it tracks which features are already implemented versus what should be built next.
 
-## Implemented From plan.md
+## Current implementation snapshot
 
-### Project Foundation
+The codebase already contains the core placement portal MVP:
 
-- Django project scaffolded with modular apps.
-- SQLite configured for simple local development.
-- PostgreSQL-ready settings through `DATABASE_URL`.
-- Reusable Bootstrap template layout.
-- Shared role-aware navigation in the base template.
-- Page-level quick navigation for common role-specific actions.
-- Local static and media configuration.
-- Django admin enabled.
-- Basic production-oriented settings placeholders are present.
+- Custom user model with admin, student, and company roles.
+- Student and company profile creation and editing flows.
+- Placement drive creation, listing, detail view, eligibility checks, and application submission.
+- Application status updates for companies.
+- Broadcast creation and student-facing display.
+- Admin report dashboard with summary counts and management links for students, companies, drives, and applications.
+- Role-based access controls and dashboard routing.
 
-### Modular Django Apps
+## Implemented features
 
-- `accounts` for authentication, custom user model, roles, and dashboard routing.
-- `students` for student profile and dashboard.
-- `companies` for company profile and dashboard.
-- `jobs` for placement drives and applications.
-- `broadcasts` for placement announcements.
-- `reports` for admin dashboard metrics.
+### Core placement workflow
 
-### Authentication
+- Student registration and automatic student profile creation.
+- Company registration and automatic company profile creation.
+- Student profile editing with phone, department, branch, year, CGPA, skills, photo, and resume fields.
+- Company profile editing and approval flag.
+- Placement drive model with company ownership, eligibility rules, deadline, and active/inactive state.
+- Job listing and detail pages.
+- Student application flow with duplicate prevention.
+- Company-side applicant view and status updates.
+- Broadcast creation, editing, deletion, and student-facing display.
+- Admin summary reports for students, companies, drives, applications, and offers.
 
-- Login.
-- Logout.
-- Password change views.
-- User registration.
-- Role-based dashboard routing.
-- Role-based access decorators.
-- Admin, student, and company roles.
+### Trust and access foundation
 
-### Student Module
+- Student verification flag exists in the model and can be toggled from the admin report views.
+- Company approval flag exists in the model and can be toggled from the admin report views.
+- Role-based access is enforced on student, company, and admin views.
+- Employers can manage only their own drives and applicants.
 
-- Student account registration.
-- Automatic student profile creation.
-- Student profile editing.
-- Fields for phone, department, branch, year, CGPA, skills, photo, and resume.
-- Student dashboard.
-- Recommended eligible jobs.
-- Application status list.
-- Broadcast visibility.
+## Partially implemented features
 
-### Company Module
+### Authentication and account management
 
-- Company account registration.
-- Automatic company profile creation.
-- Company profile editing.
-- Company approval flag.
-- Approved companies can create placement drives.
-- Unapproved companies are blocked from posting drives.
-- Company dashboard with active drive and application counts.
+- Login, logout, registration, and password change are implemented.
+- Password reset by email is now implemented.
 
-### Placement Drives / Jobs
+### Admin operations
 
-- Placement drive model.
-- Company-created job/drive postings.
-- Job listing page.
-- Job detail page.
-- Search by job title or company name.
-- Eligibility check by CGPA and branch.
-- Active/inactive job flag.
+- The project has admin report pages for student verification, company approval, drive activation, and application review.
+- A dedicated polished admin console for all management actions is still missing.
 
-### Applications
+### Notifications and communications
 
-- Students can apply to eligible drives.
-- Duplicate applications are prevented.
-- Companies can view applicants for their drives.
-- Companies can update application status.
-- Status values include Applied, Shortlisted, Interview, Offered, and Rejected.
+- Broadcasts are visible in the student area.
+- Basic email notifications are now implemented for broadcast creation and application status changes.
+- SMS, push notifications, and delivery tracking are not implemented yet.
 
-### Broadcasts
+### Reporting
 
-- Admin/staff-only broadcast list.
-- Broadcast create and edit forms.
-- Audience field for all students, final-year students, or companies.
-- Student dashboard displays active broadcasts.
+- The dashboard shows core counts and recent activity.
+- Advanced charts, filters, exports, and department-wise analytics are not implemented yet.
 
-### Reports
+## Still needs to be implemented
 
-- Admin report dashboard.
-- Counts for students, companies, approved companies, jobs, active jobs, applications, offers, and users.
-- Recent jobs.
-- Recent applications.
+### High priority
 
-### Validation / Quality
+- Dedicated admin frontend pages for student management and company approval.
+- Better workflow for reviewing and managing drives from a single admin area.
+- SMS notifications and richer notification preferences.
+- A fuller student application tracker and notification inbox.
+- Profile completeness guidance and privacy settings.
 
-- Server-side validation through Django forms.
-- CSRF protection through Django templates.
-- Django migrations generated.
-- Basic regression tests added.
-- `python manage.py check` passes.
-- `python manage.py test` passes.
+### Medium priority
 
-## Partially Implemented From plan.md
+- ID-proof upload and verification workflow.
+- Resume builder or CV generation support.
+- Skill assessments and a basic job-readiness score.
+- Interview scheduling and status-change reminders.
+- Advanced filtering for jobs by branch, CGPA, skills, deadline, location, and company.
+- Better company-side applicant search and profile detail pages.
 
-### Password Reset
-
-- Password change exists.
-- Full password reset by email is not implemented.
-
-### Admin Management
-
-- Admin can manage users, students, companies, jobs, applications, and broadcasts through Django admin.
-- Custom frontend pages for approving companies, managing students, and managing all drives are not yet built.
-
-### Broadcast Notifications
-
-- Broadcast records are implemented.
-- In-app display is implemented.
-- Email, SMS, push notification, delivery tracking, and read tracking are not implemented.
-
-### Reports
-
-- Basic counts and recent activity are implemented.
-- Detailed placement statistics, filtering, charts, export, and department-wise analytics are not implemented.
-
-### Responsive UI
-
-- Bootstrap layout is used.
-- Shared navigation now appears across pages.
-- Role-specific links are shown for students, companies, and admins.
-- Full mobile/responsive QA and polish are still pending.
-
-## Not Implemented From plan.md
-
-- Password reset email flow.
-- Session timeout and session security configuration beyond Django defaults.
-- Dedicated admin frontend for student management.
-- Dedicated admin frontend for company approval.
-- Dedicated admin frontend for placement drive management.
-- Dedicated admin frontend navigation for all management sections beyond reports and broadcasts.
-- Admin frontend for publishing and managing placement announcements outside the basic broadcast pages.
-- Admin report generation workflow.
-- Delete placement drive workflow.
-- Delete broadcast workflow.
-- Company drive delete workflow.
-- Student document management beyond resume/photo fields.
-- Academic document upload and management.
-- Certificate upload and management.
-- Dedicated student applications page.
-- Dedicated student broadcasts/notifications page.
-- Dedicated company applicants overview across all drives.
-- Dedicated company application/status history page.
-- Job filtering by branch, CGPA, skills, deadline, location, and company.
-- Fine-grained notification targeting.
-- Placement report exports.
-- PostgreSQL deployment configuration.
-- Production deployment setup.
-
-## Implemented From deep-research-report.md
-
-### Core Placement Portal
-
-- Student profiles with academic and skill details.
-- Employer/company profiles.
-- Job/placement listings.
-- Application tracking.
-- Basic status notifications through dashboard state.
-- Broadcast announcements.
-- Admin analytics summary.
-- Role-based dashboards.
-- Role-aware shared navigation.
-
-### Trust / Verification Foundation
-
-- Student profile has an `is_verified` flag.
-- Company profile has an `is_approved` flag.
-- Admin can manage these through Django admin.
-
-### Privacy / Access Foundation
-
-- Role-based access is enforced on key pages.
-- Employers can only manage their own drives and applicants.
-- Students apply through their own profile.
-
-## Not Implemented From deep-research-report.md
-
-These are broader or advanced features from the research report and are intentionally outside the current simple MVP.
-
-### Student Readiness / Skill Gap Features
-
-- Skill assessments.
-- Quiz engine.
-- Assessment results.
-- Job Readiness Index.
-- Personalized learning paths.
-- Course recommendations.
-- Skill gap analytics.
-
-### AI Features
+### Lower priority / future roadmap
 
 - AI-powered job matching.
-- Resume analyzer.
-- Resume parsing.
-- Placement prediction.
-- Career recommendation engine.
-- Chatbot.
+- Resume parsing and analyzer tools.
+- Mock interviews, mentoring, and community features.
+- Analytics exports, charts, and printable reports.
+- PostgreSQL deployment, CI/CD, monitoring, and production hardening.
 
-### Resume / Portfolio
+## Comparison with the research report
 
-- Resume builder.
-- Auto-generated CV templates.
-- Video resume.
-- Portfolio/project showcase.
+### Implemented from the research report
 
-### Verification
+- Student profiles with academic and skill details.
+- Company profiles.
+- Placement job listings and applications.
+- Application tracking and status updates.
+- Broadcast announcements.
+- Summary analytics dashboard.
+- Role-based dashboards and shared navigation.
 
-- ID-proof upload workflow.
-- Government ID verification.
-- Selfie verification.
-- OCR.
-- Face matching.
-- Third-party identity verification integration.
+### Partially aligned with the research report
 
-### Student Profile Depth
+- Student verification and company approval are present as flags and toggles.
+- Basic privacy and access control exist, but full consent, privacy-policy, and data-retention flows are not yet built.
+- The platform supports basic broadcasts, but not targeted, scheduled, templated, or multi-channel delivery.
 
-- Date of birth.
-- Address.
-- Programme/course field.
-- College or institution field.
-- Certifications.
-- Achievements.
-- Profile completeness score.
-- Resume visibility controls.
-- Public/private profile settings.
-- Student consent preferences.
-- Profile verification review workflow.
+### Still missing versus the research report
 
-### Placement Broadcast Depth
+- ID verification with selfie and OCR.
+- Resume builder and portfolio features.
+- Skill assessments, learning paths, and job-readiness metrics.
+- Interview scheduling, mentor matching, and messaging.
+- Advanced admin analytics and exportable reports.
+- Notification preferences, delivery tracking, and multi-channel alerts.
+- Production-grade security, compliance, and deployment features.
 
-- Targeted broadcasts by department, branch, batch, year, CGPA, or custom student group.
-- Scheduled broadcasts with background sending.
-- Broadcast preview.
-- Broadcast templates with placeholders such as student name and job link.
-- Attachments on broadcasts.
-- Broadcast delivery status.
-- Broadcast open/read tracking.
-- Broadcast click tracking.
-- Broadcast history dashboard.
-- Email/SMS/push channel selection.
+## Structured implementation plan
 
-### Job / Drive Workflow Depth
+### Phase 1 - Stabilize the core MVP
 
-- Admin-created internal placement listings.
-- Admin approval flow for employer-created job postings.
-- Job expiry automation after deadline.
-- Drive close/reopen workflow.
-- Salary range or CTC breakdown.
-- Internship vs full-time job type.
-- Remote/hybrid/on-site job type.
-- Required skills as structured tags.
-- Eligibility matching explanation for students.
-- Saved jobs or bookmarked jobs.
-- Deadline reminders.
+1. Completed: password reset by email.
+2. Improve the admin experience for approving companies and verifying students.
+3. Add a clearer company and admin workflow for managing drives and applications.
+4. Ensure all main create/edit/delete actions are visible and consistent in the UI.
 
-### Application Workflow Depth
+### Phase 2 - Improve communication and trust
 
-- Student application tracker page with full history.
-- Application withdrawal.
-- Application confirmation page.
-- Status-change notification history.
-- Interview round tracking.
-- Interview schedule details.
-- Offer acceptance/rejection.
-- Rejection reason or company notes visibility controls.
-- Admin ability to update application statuses.
-- Bulk status updates.
+1. Completed: basic email notifications for broadcasts and application status changes.
+2. Completed: notification preferences for students and companies.
+3. Build a basic document verification workflow for student identity and resume files.
+4. Add consent, privacy, and profile visibility settings.
 
-### Interview / Mentorship
+### Phase 3 - Improve student and employer experience
 
-- Interview scheduling.
-- Calendar integrations.
-- Virtual interview links.
-- Mock interview scheduling.
-- Mentor/alumni matching.
-- Chat or messaging.
-- Student availability management.
-- Interview slot proposal and confirmation.
-- Interview reminders.
-- Mock interview feedback.
+1. Create a dedicated student application tracker and notifications page.
+2. Add job filtering and better eligibility explanation on the job listing pages.
+3. Add company-side applicant search, sorting, and profile detail views.
+4. Add interview scheduling and status-change reminders.
 
-### Notifications
+### Phase 4 - Expand analytics and reporting
 
-- Email notifications.
-- SMS notifications.
-- Push notifications.
-- Notification preferences.
-- Notification delivery/read analytics.
-- Scheduled notification sending.
-- Application deadline alerts.
-- Interview reminder alerts.
-- Profile completeness reminders.
-- Assessment result alerts.
-- In-app notification inbox.
-- Notification unread counts.
+1. Add charts for placements, applications, and approvals.
+2. Add filters by department, branch, year, and date range.
+3. Add CSV or PDF export for admin reports.
+4. Improve dashboard KPIs for placement trends and recruiter activity.
 
-### Advanced Employer Features
+### Phase 5 - Production readiness
 
-- Employer applicant search.
-- Applicant profile detail view with resume preview.
-- Shortlist filters.
-- Offer management workflow.
-- Employer analytics.
-- Cross-drive applicant overview.
-- Company contact person profile.
-- Company size and headquarters fields.
-- Company logo display polish.
-- Company verification documents.
-- Employer dashboard metrics for job views and applicant conversion.
-- Applicant sorting by CGPA, branch, skills, and application status.
-- Recruiter messaging to applicants.
-- Company video or presentation upload.
+1. Move from SQLite to PostgreSQL for deployment.
+2. Add secure production settings, HTTPS handling, and environment-based configuration.
+3. Add logging, monitoring, backup strategy, and CI/CD.
+4. Add privacy and compliance screens for terms, consent, and data handling.
 
-### Advanced Admin Analytics
+### Phase 6 - Advanced features
 
-- Placement rate by department.
-- Average package analytics.
-- Time-to-placement metrics.
-- Skill-gap trend charts.
-- Assessment performance dashboards.
-- KPI dashboards.
-- CSV/PDF exports.
-- Placed vs unplaced student reports.
-- Company-wise placement reports.
-- Branch-wise and batch-wise reports.
-- Application funnel analytics.
-- Broadcast engagement analytics.
-- Custom date-range filters.
-- Printable reports.
+1. Add assessments, quizzes, and a basic readiness score.
+2. Add recommended learning resources and skill-gap guidance.
+3. Add AI-based job matching and resume assistance.
+4. Add mentoring, mock interviews, and community features.
 
-### Admin Operations / Settings
+## Recommended implementation order
 
-- Academic year management.
-- Department management.
-- Branch management.
-- Batch management.
-- Student group management.
-- Notification template management.
-- Role/sub-role management for placement coordinators.
-- Bulk student import.
-- Bulk company import.
-- Bulk student verification.
-- Student suspension/deactivation workflow.
-- Company suspension/deactivation workflow.
-- ERP integration settings.
-
-### Learning / Community Enhancements
-
-- Learning resource library.
-- Curated external course links.
-- Coding practice links.
-- Aptitude practice module.
-- Soft-skill training module.
-- Discussion forums or groups.
-- Peer-to-peer help spaces.
-- Alumni networking.
-- Gamification badges.
-- Progress bars for readiness activities.
-- Internship tracking.
-- Mentor feedback history.
-
-### Compliance / Security Enhancements
-
-- Consent flows.
-- Privacy policy screens.
-- Data retention policy implementation.
-- Audit logs.
-- Sensitive document encryption strategy.
-- Production HTTPS/security deployment configuration.
-- Terms of service page.
-- User data export.
-- User data deletion request flow.
-- Data retention automation.
-- Permission audit for employer access to student data.
-- Login activity tracking.
-- Multi-factor authentication.
-- Rate limiting.
-
-### Infrastructure
-
-- Docker.
-- CI/CD pipeline.
-- Cloud deployment.
-- Managed PostgreSQL setup.
-- Object storage such as S3.
-- Monitoring and logging.
-- Backup automation.
-- Staging environment.
-- Production environment variables documentation.
-- Error tracking.
-- Health check endpoint.
-- Static/media file hosting strategy.
-- Database backup restore procedure.
-- Release checklist.
-
-### Support / Product Operations
-
-- Help or support page.
-- FAQ page.
-- User onboarding checklist.
-- Admin training guide.
-- Feedback collection.
-- Student/employer satisfaction survey.
-- NPS tracking.
-- Monetization/licensing workflows.
-- Institution branding/customization.
-- Multi-institution support.
-
-## Recommended Next Implementation Order
-
-1. Add admin frontend pages for company approval and student management.
-2. Add delete/close workflow for placement drives and broadcasts.
-3. Add password reset email flow.
-4. Improve application tracking for students with a dedicated page.
-5. Add applicant profile detail pages for companies.
-6. Add basic charts and filters to reports.
-7. Add email notifications for broadcasts and application status changes.
-8. Add document management for student resumes and certificates.
-9. Move from SQLite to PostgreSQL when the MVP flow is stable.
-10. Start skill assessment module after core placement workflow is polished.
-11. Add targeted/scheduled broadcasts and email notifications.
-12. Add admin settings for departments, branches, batches, and academic years.
-13. Add employer applicant search and applicant profile detail pages.
-14. Add privacy, consent, and data retention screens before collecting sensitive documents.
-15. Add interview scheduling and status-change notifications.
-
-## Recent Updates
-
-- Added shared navigation to the top navbar for all authenticated users.
-- Added secondary quick navigation under the navbar.
-- Added student profile navigation.
-- Added company profile and post-job navigation.
-- Added admin reports, broadcasts, and Django admin navigation.
+1. Completed: password reset and account recovery.
+2. Admin management screens for students and companies.
+3. Expand notification coverage with SMS and richer preferences.
+4. Student application tracker and notification inbox.
+5. Verification and document upload workflow.
+6. Charts, filters, and exportable reports.
+7. Production deployment and security hardening.
+8. Assessments, readiness metrics, and AI features.

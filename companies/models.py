@@ -10,6 +10,7 @@ class CompanyProfile(models.Model):
     contact_phone = models.CharField(max_length=20, blank=True)
     description = models.TextField(blank=True)
     logo = models.ImageField(upload_to="companies/logos/", blank=True)
+    receive_email_notifications = models.BooleanField(default=True)
     is_approved = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

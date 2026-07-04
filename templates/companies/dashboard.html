@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}Company Dashboard | SkillBridge{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <div>
+    <h1 class="h3 mb-1">{{ company.name }}</h1>
+    <p class="text-secondary mb-0">{% if company.is_approved %}Approved{% else %}Pending admin approval{% endif %}</p>
+  </div>
+  <div class="d-flex gap-2">
+    <a class="btn btn-outline-primary" href="{% url 'companies:profile' %}">Edit profile</a>
+    <a class="btn btn-primary" href="{% url 'jobs:create' %}">Post job</a>
+  </div>
+</div>
+
+<div class="row g-3 mb-4">
+  <div class="col-md-6"><div class="dashboard-panel metric p-3"><div class="text-secondary">Active Drives</div><div class="h4 mb-0">{{ active_drive_count }}</div></div></div>
+  <div class="col-md-6"><div class="dashboard-panel metric p-3"><div class="text-secondary">Applications</div><div class="h4 mb-0">{{ application_count }}</div></div></div>
+</div>
+
+<div class="dashboard-panel p-3">
+  <h2 class="h5">Placement Drives</h2>
+  {% for drive in drives %}
+    <div class="border-top py-3 d-flex justify-content-between gap-3">
+      <div>
+        <div class="fw-semibold">{{ drive.title }}</div>
+        <div class="text-secondary small">{{ drive.deadline }} · {{ drive.applications.count }} applicants</div>
+      </div>
+      <div class="d-flex gap-2">
+        <a class="btn btn-sm btn-outline-primary" href="{% url 'jobs:applicants' drive.pk %}">Applicants</a>
+        <a class="btn btn-sm btn-outline-secondary" href="{% url 'jobs:edit' drive.pk %}">Edit</a>
+      </div>
+    </div>
+  {% empty %}
+    <p class="text-secondary mb-0">No drives created yet.</p>
+  {% endfor %}
+</div>
+{% endblock %}

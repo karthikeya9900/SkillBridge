@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}SkillBridge{% endblock %}
+{% block content %}
+<section class="py-5">
+  <div class="row align-items-center g-4">
+    <div class="col-lg-7">
+      <p class="text-primary fw-semibold mb-2">Student Placement Platform</p>
+      <h1 class="display-5 fw-bold">SkillBridge</h1>
+      <p class="lead text-secondary">A simple placement workflow for students, companies, and placement administrators.</p>
+      <div class="d-flex gap-2">
+        <a class="btn btn-primary" href="{% url 'register' %}">Create account</a>
+        <a class="btn btn-outline-primary" href="{% url 'login' %}">Login</a>
+      </div>
+    </div>
+    <div class="col-lg-5">
+      <div class="dashboard-panel p-4">
+        <h2 class="h5">MVP Modules</h2>
+        <ul class="mb-0">
+          <li>Role-based dashboards</li>
+          <li>Student and company profiles</li>
+          <li>Placement drives and applications</li>
+          <li>Broadcasts and reports</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

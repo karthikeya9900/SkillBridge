@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Broadcasts | SkillBridge{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h1 class="h3 mb-0">Broadcasts</h1>
+  <a class="btn btn-primary" href="{% url 'broadcasts:create' %}">Create broadcast</a>
+</div>
+<div class="dashboard-panel p-3">
+  {% for broadcast in broadcasts %}
+    <div class="border-top py-3 d-flex justify-content-between gap-3">
+      <div>
+        <div class="fw-semibold">{{ broadcast.title }}</div>
+        <div class="text-secondary small">{{ broadcast.get_audience_display }} · {{ broadcast.publish_at }}</div>
+        <p class="mb-0">{{ broadcast.message|truncatewords:22 }}</p>
+      </div>
+      <a class="btn btn-sm btn-outline-primary" href="{% url 'broadcasts:edit' broadcast.pk %}">Edit</a>
+    </div>
+  {% empty %}
+    <p class="text-secondary mb-0">No broadcasts created yet.</p>
+  {% endfor %}
+</div>
+{% endblock %}

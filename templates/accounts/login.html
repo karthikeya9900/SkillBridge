@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Login | SkillBridge{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-6 col-lg-5">
+    <div class="dashboard-panel p-4">
+      <h1 class="h3 mb-3">Login</h1>
+      <form method="post">
+        {% include "includes/form.html" %}
+        <button class="btn btn-primary w-100">Login</button>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

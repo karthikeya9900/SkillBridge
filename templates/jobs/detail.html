@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}{{ drive.title }} | SkillBridge{% endblock %}
+{% block content %}
+<div class="dashboard-panel p-4">
+  <div class="d-flex justify-content-between align-items-start gap-3">
+    <div>
+      <h1 class="h3">{{ drive.title }}</h1>
+      <p class="text-secondary">{{ drive.company.name }} · {{ drive.location|default:"Location not specified" }}</p>
+    </div>
+    {% if user.is_student %}
+      {% if existing_application %}
+        <span class="badge text-bg-success">Applied: {{ existing_application.get_status_display }}</span>
+      {% else %}
+        <form method="post" action="{% url 'jobs:apply' drive.pk %}">
+          {% csrf_token %}
+          <button class="btn btn-primary">Apply</button>
+        </form>
+      {% endif %}
+    {% endif %}
+  </div>
+  <hr>
+  <dl class="row">
+    <dt class="col-sm-3">Package</dt><dd class="col-sm-9">{{ drive.package_lpa|default:"Not disclosed" }} LPA</dd>
+    <dt class="col-sm-3">Minimum CGPA</dt><dd class="col-sm-9">{{ drive.min_cgpa|default:"No minimum" }}</dd>
+    <dt class="col-sm-3">Eligible branches</dt><dd class="col-sm-9">{{ drive.eligible_branches|default:"All branches" }}</dd>
+    <dt class="col-sm-3">Deadline</dt><dd class="col-sm-9">{{ drive.deadline }}</dd>
+  </dl>
+  <h2 class="h5">Description</h2>
+  <p>{{ drive.description|linebreaks }}</p>
+  <h2 class="h5">Requirements</h2>
+  <p>{{ drive.requirements|default:"No additional requirements listed."|linebreaks }}</p>
+</div>
+{% endblock %}

@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %}Student Profile | SkillBridge{% endblock %}
+{% block content %}
+<h1 class="h3 mb-3">Student Profile</h1>
+<form method="post" enctype="multipart/form-data" class="dashboard-panel p-4">
+  {% include "includes/form.html" %}
+  <button class="btn btn-primary">Save profile</button>
+</form>
+{% endblock %}

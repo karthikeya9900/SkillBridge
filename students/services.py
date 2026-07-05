@@ -1,5 +1,9 @@
 from broadcasts.models import Broadcast
 from jobs.models import Application, PlacementDrive
+from django.db.models import Count
+from companies.models import CompanyProfile
+from students.models import StudentProfile
+import json
 
 
 def student_dashboard_context(student):
@@ -16,4 +20,14 @@ def student_dashboard_context(student):
         "applications": applications,
         "recommended_jobs": jobs[:5],
         "broadcasts": broadcasts,
+        # Stats for dashboard
+        "total_companies": CompanyProfile.objects.count(),
+        "total_students": StudentProfile.objects.count(),
+        "total_drives": PlacementDrive.objects.count(),
+        "active_drives": PlacementDrive.objects.filter(is_active=True).count(),
+        "applications_by_status": list(Application.objects.filter(student=student).values("status").annotate(count=Count("id")).order_by("status")),
+        "year_distribution": list(StudentProfile.objects.values("year").annotate(count=Count("id")).order_by("year")),
+        # JSON serialized versions for safe JS consumption
+        "applications_by_status_json": json.dumps(list(Application.objects.filter(student=student).values("status").annotate(count=Count("id")).order_by("status"))),
+        "year_distribution_json": json.dumps(list(StudentProfile.objects.values("year").annotate(count=Count("id")).order_by("year"))),
     }

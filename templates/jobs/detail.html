@@ -9,7 +9,7 @@
     </div>
     {% if user.is_student %}
       {% if existing_application %}
-        <span class="badge text-bg-success">Applied: {{ existing_application.get_status_display }}</span>
+        <span class="badge text-bg-success">status: {{ existing_application.status }}</span>
       {% else %}
         <form method="post" action="{% url 'jobs:apply' drive.pk %}">
           {% csrf_token %}

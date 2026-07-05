@@ -54,3 +54,8 @@ def delete_broadcast(request, pk):
     else:
         messages.info(request, "Use the delete button on a broadcast to remove it.")
     return redirect("broadcasts:list")
+
+
+def detail_broadcast(request, pk):
+    broadcast = get_object_or_404(Broadcast.objects.select_related("created_by"), pk=pk, is_active=True)
+    return render(request, "broadcasts/detail.html", {"broadcast": broadcast})

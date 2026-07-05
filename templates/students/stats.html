@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block title %}Student Stats | SkillBridge{% endblock %}
+{% block content %}
+<div class="row g-3 mb-4">
+    <div class="col-md-3">
+        <div class="dashboard-panel p-3 text-center">
+            <div class="h1">{{ total_companies }}</div>
+            <div class="text-secondary">Total Companies</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="dashboard-panel p-3 text-center">
+            <div class="h1">{{ total_students }}</div>
+            <div class="text-secondary">Total Students</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="dashboard-panel p-3 text-center">
+            <div class="h1">{{ total_drives }}</div>
+            <div class="text-secondary">Total Drives</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="dashboard-panel p-3 text-center">
+            <div class="h1">{{ active_drives }}</div>
+            <div class="text-secondary">Active Drives</div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-lg-6">
+        <div class="dashboard-panel p-3">
+            <h2 class="h5">Applications by Status</h2>
+            <canvas id="applicationsStatusChart" height="200"></canvas>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="dashboard-panel p-3">
+            <h2 class="h5">Students by Year</h2>
+            <canvas id="studentsYearChart" height="200"></canvas>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    (function () {
+        const apps = {{ applications_by_status| safe
+    }};
+    const labels = apps.map(a => a.status);
+    const data = apps.map(a => a.count);
+    const ctx = document.getElementById('applicationsStatusChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'doughnut',
+        data: { labels: labels, datasets: [{ data: data, backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc', '#f6c23e', '#e74a3b'] }] },
+        options: { responsive: true, maintainAspectRatio: false }
+    });
+
+    const years = {{ year_distribution| safe }};
+    const ylabels = years.map(y => y.year || 'Unknown');
+    const ydata = years.map(y => y.count);
+    const ctx2 = document.getElementById('studentsYearChart').getContext('2d');
+    new Chart(ctx2, {
+        type: 'bar',
+        data: { labels: ylabels, datasets: [{ label: 'Students', data: ydata, backgroundColor: '#4e73df' }] },
+        options: { responsive: true, maintainAspectRatio: false }
+    });
+  }) ();
+</script>
+{% endblock %}

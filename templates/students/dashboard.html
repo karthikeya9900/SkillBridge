@@ -1,24 +1,61 @@
-{% extends "base.html" %}
+﻿{% extends "base.html" %}
 {% block title %}Student Dashboard | SkillBridge{% endblock %}
 {% block content %}
 <div class="d-flex justify-content-between align-items-center mb-3">
   <div>
-    <h1 class="h3 mb-1">Student Dashboard</h1>
-    <p class="text-secondary mb-0">{{ profile.user.get_full_name|default:profile.user.username }}</p>
-  </div>
-  <div class="d-flex gap-2">
-    <a class="btn btn-outline-primary" href="{% url 'students:applications' %}">Applications</a>
-    <a class="btn btn-primary" href="{% url 'students:profile' %}">Edit profile</a>
+    <h1 class="h3 mb-1">Welcome, {{ profile.user.get_full_name|default:profile.user.username }}</h1>
+    <p class="text-secondary mb-0">Student Dashboard</p>
+    </div>
+    <!-- action buttons removed -->
+    </div>
+    
+    <div class="row g-3 mb-4">
+      <div class="col-md-3">
+        <div class="dashboard-panel p-3 text-center">
+          <div class="h1">{{ total_companies }}</div>
+          <div class="text-secondary">Total Companies</div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="dashboard-panel p-3 text-center">
+          <div class="h1">{{ total_students }}</div>
+          <div class="text-secondary">Total Students</div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="dashboard-panel p-3 text-center">
+          <div class="h1">{{ total_drives }}</div>
+          <div class="text-secondary">Total Drives</div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="dashboard-panel p-3 text-center">
+          <div class="h1">{{ active_drives }}</div>
+          <div class="text-secondary">Active Drives</div>
+        </div>
+      </div>
+</div>
+
+<div class="row g-4 mt-3">
+  <div class="col-lg-12">
+    <div class="dashboard-panel p-3">
+      <h2 class="h5">Applications by Status</h2>
+      <div class="mt-4">
+        {% for application in applications %}
+        <div class="border-top py-2">
+          <div class="fw-semibold"><a href="{% url 'students:application_detail' application.pk %}">{{ application.drive.title }}</a></div>
+          <span class="badge text-bg-secondary">{{ application.get_status_display }}</span>
+        </div>
+        {% empty %}
+        <p class="text-secondary mb-0">No applications submitted yet. If you believe this is incorrect, try refreshing
+          or visit the full <a href="{% url 'students:applications' %}">Applications</a> page.</p>
+        {% endfor %}
+      </div>
+    </div>
   </div>
 </div>
 
-<div class="row g-3 mb-4">
-  <div class="col-md-4"><div class="dashboard-panel metric p-3"><div class="text-secondary">CGPA</div><div class="h4 mb-0">{{ profile.cgpa|default:"Not set" }}</div></div></div>
-  <div class="col-md-4"><div class="dashboard-panel metric p-3"><div class="text-secondary">Branch</div><div class="h4 mb-0">{{ profile.branch|default:"Not set" }}</div></div></div>
-  <div class="col-md-4"><div class="dashboard-panel metric p-3"><div class="text-secondary">Verification</div><div class="h4 mb-0">{% if profile.is_verified %}Verified{% else %}Pending{% endif %}</div></div></div>
-</div>
-
-<div class="row g-4">
+<div class="row g-4 mt-3">
   <div class="col-lg-7">
     <div class="dashboard-panel p-3">
       <h2 class="h5">Recommended Jobs</h2>
@@ -34,23 +71,14 @@
     </div>
   </div>
   <div class="col-lg-5">
-    <div class="dashboard-panel p-3 mb-4">
-      <h2 class="h5">Applications</h2>
-      {% for application in applications %}
-        <div class="border-top py-2">
-          <div class="fw-semibold">{{ application.drive.title }}</div>
-          <span class="badge text-bg-secondary">{{ application.get_status_display }}</span>
-        </div>
-      {% empty %}
-        <p class="text-secondary mb-0">No applications submitted yet.</p>
-      {% endfor %}
-    </div>
     <div class="dashboard-panel p-3">
       <h2 class="h5">Broadcasts</h2>
       {% for broadcast in broadcasts %}
         <div class="border-top py-2">
-          <div class="fw-semibold">{{ broadcast.title }}</div>
-          <div class="text-secondary small">{{ broadcast.message|truncatewords:18 }}</div>
+          <a href="{% url 'broadcasts:detail' broadcast.pk %}" style="text-decoration: none; color: inherit;">
+            <div class="fw-semibold">{{ broadcast.title }}</div>
+            <div class="text-secondary small">{{ broadcast.message|truncatewords:18 }}</div>
+          </a>
         </div>
       {% empty %}
         <p class="text-secondary mb-0">No active broadcasts.</p>
@@ -59,3 +87,5 @@
   </div>
 </div>
 {% endblock %}
+
+

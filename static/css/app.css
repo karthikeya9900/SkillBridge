@@ -25,6 +25,32 @@ form textarea {
   border-radius: .375rem;
 }
 
+.password-field-wrapper {
+  position: relative;
+}
+
+.password-field-wrapper input {
+  padding-right: 3rem;
+}
+
+.password-toggle {
+  position: absolute;
+  top: 50%;
+  right: .75rem;
+  transform: translateY(-50%);
+  border: none;
+  background: transparent;
+  color: #6c757d;
+  cursor: pointer;
+  font-size: 1rem;
+  padding: 0;
+  line-height: 1;
+}
+
+.password-toggle:hover {
+  color: #0d6efd;
+}
+
 .metric {
   border-left: 4px solid #0d6efd;
 }
@@ -216,7 +242,7 @@ body.no-sidebar .container {
 }
 
 .app-sidebar:hover {
-  width: 72px;
+  width: 280px;
   box-shadow: inset -1px 0 0 rgba(255,255,255,0.08);
 }
 
@@ -263,7 +289,7 @@ body.no-sidebar .container {
 }
 
 .app-sidebar:hover .sidebar-text {
-  opacity: 0;
+  opacity: 1;
 }
 
 .app-sidebar:not(:hover) .sidebar-text {
@@ -318,8 +344,8 @@ body.no-sidebar .container {
 }
 
 .app-sidebar:hover ~ .app-main {
-  margin-left: 72px;
-  width: calc(100% - 72px);
+  margin-left: 280px;
+  width: calc(100% - 280px);
 }
 
 @media (max-width: 992px) {

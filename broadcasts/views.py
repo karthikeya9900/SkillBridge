@@ -6,6 +6,7 @@ from accounts.models import User
 
 from .forms import BroadcastForm
 from .models import Broadcast
+from notifications.services import notify_broadcast
 
 
 @role_required(User.Role.ADMIN)
@@ -23,6 +24,7 @@ def create_broadcast(request):
             broadcast.created_by = request.user
             broadcast.save()
             broadcast.send_notifications()
+            notify_broadcast(broadcast)
             messages.success(request, "Broadcast saved.")
             return redirect("broadcasts:list")
     else:

@@ -3,15 +3,10 @@ from django.shortcuts import get_object_or_404, redirect, render
 
 from accounts.decorators import role_required
 from accounts.models import User
-from broadcasts.models import Broadcast
 from jobs.models import Application
 
 from .forms import StudentProfileForm
 from .services import student_dashboard_context
-from django.db.models import Count
-from companies.models import CompanyProfile
-from jobs.models import PlacementDrive
-from students.models import StudentProfile
 
 
 @role_required(User.Role.STUDENT)
@@ -91,38 +86,4 @@ def application_detail(request, pk):
 
 @role_required(User.Role.STUDENT)
 def notifications(request):
-    profile = request.user.student_profile
-    audiences = [Broadcast.Audience.ALL]
-    if profile.year == profile.Year.FINAL:
-        audiences.append(Broadcast.Audience.FINAL_YEAR)
-    broadcasts = Broadcast.objects.filter(is_active=True, audience__in=audiences).select_related("created_by")
-    return render(request, "students/notifications.html", {"broadcasts": broadcasts})
-
-
-@role_required(User.Role.STUDENT)
-def stats_dashboard(request):
-    # High-level counts
-    total_companies = CompanyProfile.objects.count()
-    total_students = StudentProfile.objects.count()
-    total_drives = PlacementDrive.objects.count()
-    active_drives = PlacementDrive.objects.filter(is_active=True).count()
-
-    # Applications by status
-    applications_by_status = (
-        Application.objects.values("status").annotate(count=Count("id")).order_by("status")
-    )
-
-    # Students by year distribution
-    year_distribution = (
-        StudentProfile.objects.values("year").annotate(count=Count("id")).order_by("year")
-    )
-
-    context = {
-        "total_companies": total_companies,
-        "total_students": total_students,
-        "total_drives": total_drives,
-        "active_drives": active_drives,
-        "applications_by_status": list(applications_by_status),
-        "year_distribution": list(year_distribution),
-    }
-    return render(request, "students/stats.html", context)
+    return redirect("notifications:list")

@@ -26,23 +26,22 @@
               class="sidebar-text">Profile</span></a></li>
         <li><a class="sidebar-link" href="{% url 'students:applications' %}"><span class="sidebar-icon">📝</span><span
               class="sidebar-text">Applications</span></a></li>
-        <li><a class="sidebar-link" href="{% url 'students:notifications' %}"><span class="sidebar-icon">🔔</span><span
-              class="sidebar-text">Notifications</span></a></li>
+        <li><a class="sidebar-link" href="{% url 'notifications:list' %}"><span class="sidebar-icon">🔔</span><span
+              class="sidebar-text">Notifications{% if unread_notification_count %} ({{ unread_notification_count }}){% endif %}</span></a></li>
         {% endif %}
         {% if user.is_company %}
         <li><a class="sidebar-link" href="{% url 'companies:profile' %}"><span class="sidebar-icon">🏢</span><span
               class="sidebar-text">Company</span></a></li>
         <li><a class="sidebar-link" href="{% url 'companies:applicants' %}"><span class="sidebar-icon">🧑‍💼</span><span
               class="sidebar-text">Applicants</span></a></li>
+        <li><a class="sidebar-link" href="{% url 'notifications:list' %}"><span class="sidebar-icon">🔔</span><span
+              class="sidebar-text">Notifications{% if unread_notification_count %} ({{ unread_notification_count }}){% endif %}</span></a></li>
         {% if user.company_profile_approved %}
         <li><a class="sidebar-link" href="{% url 'jobs:create' %}"><span class="sidebar-icon">➕</span><span
               class="sidebar-text">Post Job</span></a></li>
         {% endif %}
         {% endif %}
         {% if user.is_platform_admin %}
-        <li><a class="sidebar-link" href="{% url 'reports:dashboard' %}"><span class="sidebar-icon">📈</span><span
-              class="sidebar-text">Reports</span></a>
-        </li>
         <li><a class="sidebar-link" href="{% url 'reports:students' %}"><span class="sidebar-icon">🎓</span><span
               class="sidebar-text">Students</span></a>
         </li>
@@ -52,8 +51,14 @@
         <li><a class="sidebar-link" href="{% url 'reports:drives' %}"><span class="sidebar-icon">🚀</span><span
               class="sidebar-text">Drives</span></a>
         </li>
+        <li><a class="sidebar-link" href="{% url 'reports:applications' %}"><span class="sidebar-icon">📋</span><span
+              class="sidebar-text">Applications</span></a>
+        </li>
         <li><a class="sidebar-link" href="{% url 'broadcasts:list' %}"><span class="sidebar-icon">📣</span><span
               class="sidebar-text">Broadcasts</span></a>
+        </li>
+        <li><a class="sidebar-link" href="{% url 'notifications:list' %}"><span class="sidebar-icon">🔔</span><span
+              class="sidebar-text">Notifications{% if unread_notification_count %} ({{ unread_notification_count }}){% endif %}</span></a>
         </li>
         <li><a class="sidebar-link" href="/admin/"><span class="sidebar-icon">🛠️</span><span
               class="sidebar-text">Admin</span></a>

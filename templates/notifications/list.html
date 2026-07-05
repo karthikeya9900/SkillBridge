@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Notifications | SkillBridge{% endblock %}
+{% block content %}
+<h1 class="h3 mb-3">Notifications</h1>
+<div class="dashboard-panel p-3">
+  {% for notification in notifications %}
+    <div class="border-top py-3{% if not notification.is_read %} fw-semibold{% endif %}">
+      <div class="d-flex justify-content-between gap-3">
+        <div>
+          {% if notification.link %}
+            <a href="{{ notification.link }}" class="text-decoration-none">{{ notification.title }}</a>
+          {% else %}
+            {{ notification.title }}
+          {% endif %}
+        </div>
+        <span class="small text-secondary">{{ notification.created_at|date:"M d, Y H:i" }}</span>
+      </div>
+      <div class="small text-secondary">{{ notification.get_notification_type_display }}</div>
+      <p class="mb-0 mt-2">{{ notification.message|linebreaksbr }}</p>
+    </div>
+  {% empty %}
+    <p class="text-secondary mb-0">No notifications yet.</p>
+  {% endfor %}
+</div>
+{% endblock %}

@@ -6,7 +6,6 @@ from django.urls import reverse
 from companies.models import CompanyProfile
 from students.models import StudentProfile
 
-
 class PlacementDrive(models.Model):
     company = models.ForeignKey(CompanyProfile, on_delete=models.CASCADE, related_name="drives")
     title = models.CharField(max_length=180)
@@ -72,6 +71,11 @@ class Application(models.Model):
         if self.pk:
             previous_status = Application.objects.filter(pk=self.pk).values_list("status", flat=True).first()
         super().save(*args, **kwargs)
+
+        from notifications.services import notify_application_status_change
+
+        notify_application_status_change(self, previous_status)
+
         if previous_status and previous_status != self.status and self.student.user.email and self.student.receive_email_notifications:
             send_mail(
                 subject=f"SkillBridge application update: {self.drive.title}",

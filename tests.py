@@ -10,6 +10,7 @@ from accounts.services import create_profile_for_user
 from broadcasts.models import Broadcast
 from companies.models import CompanyProfile
 from jobs.models import Application, PlacementDrive
+from notifications.models import Notification
 
 
 class SkillBridgeFlowTests(TestCase):
@@ -75,6 +76,12 @@ class SkillBridgeFlowTests(TestCase):
         self.assertContains(response, "Application status updated.")
         application.refresh_from_db()
         self.assertEqual(application.status, Application.Status.SHORTLISTED)
+        self.assertTrue(
+            Notification.objects.filter(
+                recipient=self.student_user,
+                notification_type=Notification.Type.APPLICATION_STATUS,
+            ).exists()
+        )
 
     def test_unapproved_company_cannot_create_drive(self):
         self.company.is_approved = False
@@ -120,17 +127,22 @@ class SkillBridgeFlowTests(TestCase):
         self.assertContains(response, "Use the logout button")
 
     def test_student_applications_and_notifications_pages_render(self):
-        Broadcast.objects.create(
-            title="Final Year Update",
-            message="Prepare for the drive.",
-            audience=Broadcast.Audience.FINAL_YEAR,
-            created_by=self.admin,
+        self.client.login(username="admin", password="TestPass123!")
+        self.client.post(
+            reverse("broadcasts:create"),
+            {
+                "title": "Final Year Update",
+                "message": "Prepare for the drive.",
+                "audience": Broadcast.Audience.FINAL_YEAR,
+                "publish_at": "2026-07-04T09:30",
+                "is_active": "on",
+            },
         )
         Application.objects.create(student=self.student, drive=self.drive)
         self.client.login(username="student", password="TestPass123!")
 
         applications_response = self.client.get(reverse("students:applications"))
-        notifications_response = self.client.get(reverse("students:notifications"))
+        notifications_response = self.client.get(reverse("notifications:list"))
 
         self.assertContains(applications_response, "Developer Intern")
         self.assertContains(notifications_response, "Final Year Update")
@@ -228,3 +240,64 @@ class SkillBridgeFlowTests(TestCase):
         self.assertContains(response, "Broadcast saved.")
         self.assertEqual(len(mail.outbox), 1)
         self.assertIn(self.student_user.email, mail.outbox[0].to)
+        self.assertTrue(
+            Notification.objects.filter(
+                recipient=self.student_user,
+                notification_type=Notification.Type.BROADCAST,
+                title="Drive Alert",
+            ).exists()
+        )
+
+    def test_new_job_notifies_eligible_students_and_admins(self):
+        self.client.login(username="company", password="TestPass123!")
+        response = self.client.post(
+            reverse("jobs:create"),
+            {
+                "title": "Backend Engineer",
+                "description": "Build APIs",
+                "requirements": "Python",
+                "location": "Remote",
+                "package_lpa": "12.00",
+                "min_cgpa": "7.00",
+                "eligible_branches": "CSE",
+                "deadline": (date.today() + timedelta(days=14)).isoformat(),
+                "is_active": "on",
+            },
+            follow=True,
+        )
+
+        self.assertContains(response, "Placement drive created.")
+        self.assertTrue(
+            Notification.objects.filter(
+                recipient=self.student_user,
+                notification_type=Notification.Type.NEW_JOB,
+                title__icontains="Backend Engineer",
+            ).exists()
+        )
+        self.assertTrue(
+            Notification.objects.filter(
+                recipient=self.admin,
+                notification_type=Notification.Type.NEW_JOB_ADMIN,
+            ).exists()
+        )
+
+    def test_company_broadcast_creates_in_app_notification(self):
+        self.client.login(username="admin", password="TestPass123!")
+        self.client.post(
+            reverse("broadcasts:create"),
+            {
+                "title": "Company Notice",
+                "message": "Please review the updated policy.",
+                "audience": Broadcast.Audience.COMPANIES,
+                "publish_at": "2026-07-04T09:30",
+                "is_active": "on",
+            },
+        )
+
+        self.assertTrue(
+            Notification.objects.filter(
+                recipient=self.company_user,
+                notification_type=Notification.Type.BROADCAST,
+                title="Company Notice",
+            ).exists()
+        )

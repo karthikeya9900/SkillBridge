@@ -6,7 +6,7 @@
         <h1 class="h3">{{ broadcast.title }}</h1>
         <p class="text-secondary mb-0">Posted on {{ broadcast.publish_at|date:"M d, Y \a\t g:i A" }} by {{ broadcast.created_by.get_full_name|default:broadcast.created_by.username }}</p>
     </div>
-    <a class="btn btn-outline-secondary btn-sm" href="{% url 'students:notifications' %}">Back to broadcasts</a>
+    <a class="btn btn-outline-secondary btn-sm" href="{% url 'notifications:list' %}">Back to notifications</a>
 </div>
 
 <div class="dashboard-panel p-4">

@@ -25,6 +25,7 @@ INSTALLED_APPS = [
     "jobs",
     "broadcasts",
     "reports",
+    "notifications",
 ]
 
 MIDDLEWARE = [
@@ -51,6 +52,7 @@ TEMPLATES = [
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
                 "accounts.context_processors.show_register",
+                "notifications.context_processors.notification_context",
             ],
         },
     },

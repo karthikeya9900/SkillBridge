@@ -8,6 +8,7 @@ from accounts.models import User
 from .forms import ApplicationStatusForm, PlacementDriveForm
 from .models import Application, PlacementDrive
 from .services import apply_to_drive, filter_drives, visible_drives_for_user
+from notifications.services import notify_new_job
 
 
 @login_required
@@ -46,6 +47,7 @@ def create_drive(request):
             drive.company = company
             drive.created_by = request.user
             drive.save()
+            notify_new_job(drive)
             messages.success(request, "Placement drive created.")
             return redirect("companies:dashboard")
     else:

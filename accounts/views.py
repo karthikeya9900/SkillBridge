@@ -38,10 +38,8 @@ def register(request):
 def logout_view(request):
     if request.method == "POST":
         logout(request)
-        messages.success(request, "You have been logged out.")
         return redirect("home")
     if request.user.is_authenticated:
-        messages.info(request, "Use the logout button to end your session.")
         return redirect("dashboard")
     return redirect("home")
 
@@ -63,7 +61,7 @@ def password_reset_request(request):
                     [user.email],
                     fail_silently=False,
                 )
-            messages.success(request, "We’ve emailed you instructions to reset your password.")
+            # The password reset done page provides the only action button.
             return redirect("password_reset_done")
     else:
         form = PasswordResetForm()

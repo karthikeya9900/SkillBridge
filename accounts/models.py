@@ -19,5 +19,23 @@ class User(AbstractUser):
         return self.role == self.Role.COMPANY
 
     @property
+    def has_company_profile(self):
+        if not self.is_company:
+            return False
+        from companies.models import CompanyProfile
+
+        return CompanyProfile.objects.filter(user=self).exists()
+
+    @property
+    def company_profile_approved(self):
+        if not self.has_company_profile:
+            return False
+
+        try:
+            return self.company_profile.is_approved
+        except Exception:
+            return False
+
+    @property
     def is_platform_admin(self):
         return self.role == self.Role.ADMIN or self.is_staff

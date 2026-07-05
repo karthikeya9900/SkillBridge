@@ -15,16 +15,40 @@ SkillBridge is a modular Django platform for managing campus placement workflows
 
 ## Local setup
 
+1. Create and activate a virtual environment.
+
+- PowerShell:
 ```powershell
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
+```
+- Command Prompt:
+```cmd
+python -m venv .venv
+.\.venv\Scripts\activate.bat
+```
+
+2. Install dependencies:
+```powershell
 pip install -r requirements.txt
+```
+
+3. Apply database migrations:
+```powershell
 python manage.py migrate
+```
+
+4. Create an admin user:
+```powershell
 python manage.py createsuperuser
+```
+
+5. Run the development server:
+```powershell
 python manage.py runserver
 ```
 
-Open http://127.0.0.1:8000/.
+Open `http://127.0.0.1:8000/` in your browser.
 
 ## Testing
 

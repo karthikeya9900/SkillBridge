@@ -1,14 +1,49 @@
 {% extends "base.html" %}
 {% block title %}Login | SkillBridge{% endblock %}
+{% block body_class %} class="no-sidebar"{% endblock %}
 {% block content %}
-<div class="row justify-content-center">
-  <div class="col-md-6 col-lg-5">
-    <div class="dashboard-panel p-4">
-      <h1 class="h3 mb-3">Login</h1>
-      <form method="post">
-        {% include "includes/form.html" %}
-        <button class="btn btn-primary w-100">Login</button>
-      </form>
+<div class="auth-page d-flex align-items-center justify-content-center py-5">
+  <div class="row gx-4 gy-4 w-100 justify-content-center">
+    <div class="col-lg-6 d-none d-lg-flex">
+      <div class="auth-hero rounded-4 overflow-hidden shadow-sm">
+        <div class="auth-hero-image"></div>
+        <div class="auth-hero-copy p-4 text-white">
+          <span class="badge bg-white text-primary mb-3">SkillBridge</span>
+          <h2 class="display-6 fw-bold">Graduated and Placed</h2>
+          <p class="lead">Priya completed her final year with a 9.2 CGPA and secured an on-campus offer from a top
+            employer.</p>
+          <div class="mt-auto pt-3">
+            <p class="mb-1 text-white-75">“SkillBridge helped me showcase my profile, connect with recruiters, and get
+              placed from campus.”</p>
+            <p class="mb-0 fw-semibold">Priya Sharma</p>
+            <p class="small text-white-75">B.Tech Computer Science, 2026</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-6 col-md-8">
+      <div class="auth-form-card p-4 p-sm-5 rounded-4 shadow-sm">
+        <div class="mb-4 text-center">
+          <p class="text-uppercase text-secondary small mb-1">Welcome</p>
+          <h1 class="h3 fw-bold mb-2">Login to SkillBridge</h1>
+          <p class="text-muted mb-0">Enter your details to continue to your placement dashboard.</p>
+        </div>
+        <form method="post">
+          {% include "includes/form.html" %}
+          <button class="btn btn-primary w-100 mb-3">Log in</button>
+          </form>
+        <div class="text-center mb-3">
+          <span class="text-muted">or</span>
+        </div>
+        <a href="#" class="btn btn-outline-secondary w-100 auth-social-btn mb-3">
+          <img src="https://www.svgrepo.com/show/355037/google.svg" alt="Google" width="18" class="me-2">Continue with Google
+        </a>
+        <div class="d-flex justify-content-between small text-muted">
+          <a href="{% url 'password_reset' %}">Forgot password?</a>
+          <a href="{% url 'register' %}">Sign up</a>
+        </div>
+        </div>
     </div>
   </div>
 </div>

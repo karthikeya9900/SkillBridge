@@ -49,3 +49,292 @@ form textarea {
   background: #eef5ff;
   border-color: #9ec5fe;
 }
+
+.auth-page {
+  min-height: calc(100vh - 80px);
+}
+
+.auth-hero {
+  display: flex;
+  flex-direction: column;
+  min-height: 200px;
+  background: linear-gradient(180deg, #5b6fff 0%, #5664ff 100%);
+}
+
+.auth-hero-image {
+  background: url('https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=900&q=80') center/cover no-repeat;
+  min-height: 160px;
+}
+
+.auth-hero-copy {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.auth-form-card {
+  background: #ffffff;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+}
+
+.auth-social-btn {
+  border-color: #d8dce5;
+  color: #2c3e50;
+}
+
+.auth-social-btn:hover {
+  background: #f8f9fa;
+}
+
+.auth-form-card .form-label {
+  font-weight: 600;
+}
+
+.auth-form-card input {
+  border-radius: 0.75rem;
+}
+
+.auth-form-card .btn {
+  border-radius: 0.75rem;
+}
+
+.auth-hero-copy .badge {
+  font-size: 0.8rem;
+  letter-spacing: 0.1em;
+}
+
+.app-layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+body.no-sidebar .app-layout {
+  display: block;
+}
+
+body.no-sidebar .app-sidebar,
+body.no-sidebar .app-main {
+  margin-left: 0 !important;
+  width: 100% !important;
+}
+
+body.no-sidebar .app-sidebar {
+  display: none;
+}
+
+/* Center main content (login/register/password pages) when sidebar is hidden */
+body.no-sidebar .app-main {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 0 1rem;
+}
+
+body.no-sidebar .auth-page {
+  min-height: 85vh;
+  width: 100%;
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 0.75rem 0;
+}
+
+/* Ensure the container inside .app-main fills available height and centers the auth content */
+body.no-sidebar .app-main > .container {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+/* Ensure full-width container when sidebar is hidden and tighten layout */
+body.no-sidebar .container {
+  max-width: none !important;
+  width: 100% !important;
+  padding-left: 0.5rem !important;
+  padding-right: 0.5rem !important;
+}
+
+/* Make the inner row center its columns and limit form width for better centering */
+.auth-page .row {
+  justify-content: center;
+  align-items: center;
+}
+
+.auth-form-card {
+  width: 100%;
+  max-width: 520px;
+}
+
+/* Responsive adjustments for auth pages */
+.auth-form-card {
+  width: 100%;
+  max-width: 560px;
+  box-sizing: border-box;
+}
+
+
+.auth-hero-image {
+  background-size: cover;
+  background-position: center;
+}
+
+@media (min-width: 992px) {
+  .auth-page .row { align-items: center; }
+  /* further tighten hero and form sizing */
+  .auth-hero { min-height: 180px; }
+  .auth-hero-image { min-height: 140px; }
+  .auth-form-card { max-width: 720px; padding: 0.75rem 1rem; min-height: 360px; }
+  /* slightly reduce badge and spacing */
+  .auth-hero-copy .badge { font-size: 0.7rem; }
+}
+
+@media (max-width: 991.98px) {
+  .auth-hero { display: none !important; }
+  body.no-sidebar .app-main > .container { padding: 0.5rem; }
+  .auth-form-card { padding: 0.5rem; }
+  .auth-page { padding: 0.5rem 0; }
+  .auth-form-card { max-width: 100%; }
+}
+
+.app-sidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 72px;
+  background: #0d6efd;
+  color: #fff;
+  overflow: hidden;
+  transition: width 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: inset -1px 0 0 rgba(255,255,255,0.08);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-sidebar:hover {
+  width: 72px;
+  box-shadow: inset -1px 0 0 rgba(255,255,255,0.08);
+}
+
+.sidebar-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem;
+  color: #fff;
+  font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.sidebar-nav {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  flex: 1;
+}
+
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: #e9f0ff;
+  padding: 0.85rem 1rem;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background 0.2s ease;
+}
+
+.sidebar-icon {
+  width: 28px;
+  min-width: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sidebar-text {
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.app-sidebar:hover .sidebar-text {
+  opacity: 0;
+}
+
+.app-sidebar:not(:hover) .sidebar-text {
+  display: none;
+}
+
+.sidebar-link:hover,
+.sidebar-action:hover {
+  background: rgba(255,255,255,0.15);
+}
+
+.sidebar-footer {
+  position: absolute;
+  bottom: 1rem;
+  width: 100%;
+  padding: 0 1rem;
+}
+
+.sidebar-user {
+  font-size: 0.9rem;
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.app-sidebar:not(:hover) .sidebar-user .sidebar-text,
+.app-sidebar:not(:hover) .sidebar-logout .sidebar-text,
+.app-sidebar:not(:hover) .sidebar-action .sidebar-text {
+  display: none;
+}
+
+.sidebar-logout {
+  margin: 0;
+}
+
+.sidebar-action {
+  background: rgba(255,255,255,0.17);
+  border-radius: 0.5rem;
+  color: #fff;
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 0.85rem;
+}
+
+.app-main {
+  margin-left: 72px;
+  width: calc(100% - 72px);
+  transition: margin-left 0.3s ease, width 0.3s ease;
+}
+
+.app-sidebar:hover ~ .app-main {
+  margin-left: 72px;
+  width: calc(100% - 72px);
+}
+
+@media (max-width: 992px) {
+  .app-sidebar {
+    position: relative;
+    width: 100%;
+    height: auto;
+  }
+
+  .app-sidebar:hover {
+    width: 100%;
+  }
+
+  .app-main {
+    margin-left: 0;
+    width: 100%;
+  }
+}
